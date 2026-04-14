@@ -1,25 +1,26 @@
-name : Deploy FastApi app on ec2
+name: Deploy FastAPI app on EC2
 
 on:
-    push:
-        branches:
-            -main
+  push:
+    branches:
+      - main
 
 jobs:
-    deploy:
-        runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-            - name: Deploy via SSH
-              uses: appleboy/ssh-action@v1.0.3
-              with:
-                host : ${{secrets.SSH_HOST}}
-                username: ubuntu
-                key: ${{secrets.SSH_KEY}}
-                script: |
-                    cd /home/ubuntu/GithubActionTut
-                    git pull
-                    docker compose up -D --build
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/ubuntu/GithubActionTut
+            git pull
+            docker compose down
+            docker compose up -d --build
